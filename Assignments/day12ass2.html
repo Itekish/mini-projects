@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge Card Generator(S)</title>
+    <style>
+        body {
+            background-color: cornsilk;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 17px;
+            text-align: center;
+        }
+
+        input {
+            text-align: center;
+            font-size: 17px;
+        }
+
+        div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 20px 0;
+            margin-left: 30%;
+        }
+
+        .div2 {
+            margin-left: 35%;
+        }
+
+        input,
+        select {
+            padding: 10px;
+        }
+
+        button {
+            height: 50px;
+            margin-left: 20px;
+            background-color: green;
+            color: white;
+            border: 0;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+
+        .Recharge {
+            background-color: blue;
+            color: white;
+            width: 200px;
+            /* font-size: 20px; */
+        }
+
+        table {
+            background-color: white;
+            width: 100%;
+        }
+
+        tr,
+        th {
+            border: 1px solid;
+            border-collapse: collapse;
+            background-color: rgb(216, 167, 108);
+            border-color: white;
+        }
+
+        #status,
+        #dateUsed {
+            color: red;
+        }
+
+        #del {
+            background-color: red;
+            width: 70px;
+            height: 40px;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Recharge Card Generator</h1>
+    <div>
+        <p>Select Network: <select name="" id="selectNetwork">
+                <option value="MTN" id="MTN">MTN</option>
+                <option value="GLO" id="GLO">GLO</option>
+                <option value="AIRTEL" id="AIRTEL">AIRTEL</option>
+                <option value="9 MOBILE" id="9 MOBILE">9 MOBILE</option>
+            </select>
+        </p>
+        <p>Enter pin: <input type="number" id="use">
+            <button onclick="reCharge()" class="Recharge">Recharge</button>
+        </p>
+    </div>
+
+    <span>Amount: <select name="Amount" id="Amount">
+            <option value="">Select Amount</option>
+            <option value="50">₦50</option>
+            <option value="100">₦100</option>
+            <option value="200">₦200</option>
+            <option value="500">₦500</option>
+            <option value="1000">₦1000</option>
+        </select></span>
+
+    <div class="div2">
+        <p>Code: <input type="number" id="code"></p>
+        <button onclick="generatePin()">Generate</button>
+        <button onclick="savePin()">Save pin</button>
+    </div>
+    <table>
+        <tr>
+            <th>S/N</th>
+            <th>Network operator</th>
+            <th>Amount</th>
+            <th>Pin</th>
+            <th>Status</th>
+            <th>Date created</th>
+            <th>Date used</th>
+            <th>Action</th>
+        </tr>
+        <tbody id="tbody"></tbody>
+    </table>
+
+</body>
+<script>
+    let pin,
+        code = document.getElementById("code");
+    let index = 1
+
+    function generatePin() {
+        pin = Math.floor(Math.random() * 123456789012);
+        return code.value = pin
+    }
+
+    let pinCode;
+    let array = [],
+    tbody = document.getElementById("tbody")
+
+    function savePin() {
+        let selectNetwork = document.getElementById("selectNetwork").value;
+
+        if (selectNetwork === "MTN") {
+            pinCode = `*555*${pin}#`
+
+        } else if (selectNetwork === "GLO") {
+            pinCode = `*123*${pin}#`
+
+        } else if (selectNetwork === "AIRTEL") {
+            pinCode = `*126*${pin}#`
+
+
+        } else if (selectNetwork === "9 MOBILE") {
+            pinCode = `*888*${pin}#`
+
+        }
+        console.log(pinCode);
+        amount = document.getElementById("Amount"),
+            createDate = new Date().toLocaleDateString()
+        console.log(createDate);
+
+
+        pinCodeInfo = {
+            sn: index++,
+            netOp: selectNetwork,
+            Amt: amount.value,
+            rePin: pinCode,
+            status: "Unused",
+            date: createDate,
+            dateUsed:"Not Used Yet"
+        }
+        console.log(pinCodeInfo);
+
+        array.push(pinCodeInfo)
+        console.log(array);
+
+        updateUI()
+
+    }
+
+    function updateUI() {
+        tbody.innerHTML = ""; 
+        for (let i = 0; i < array.length; i++) {
+            console.log(array[i]);
+            
+            tbody.innerHTML += `
+              <tr>
+                  <td>${i + 1}</td>
+                  <td>${array[i].netOp}</td>
+                  <td>${array[i].Amt}</td>
+                  <td>${array[i].rePin}</td>
+                  <td>${array[i].status}</td>
+                  <td>${array[i].date}</td>
+                  <td>${array[i].dateUsed}</td>
+                  <td><button onclick="del(${i})" id="del">Delete</button></td>
+              </tr>`;
+        }
+    }
+
+    function del(index) {
+        array.splice(index, 1);
+        // console.log(array);
+
+
+        updateUI()
+    }
+</script>
+
+</html>

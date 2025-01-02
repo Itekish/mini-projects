@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        align-items: center;
+    }
+
+    body {
+        background-color: purple;
+        align-items: center;
+    }
+
+    section {
+        background-color: rgb(2, 2, 78);
+        height: 70%vh;
+        border-radius: 1em;
+        min-width: 300px;
+        max-width: 30%;
+        padding: 2em;
+        margin-left: 35%;
+        margin-top: 5Qem;
+        color: lavender;
+        box-shadow: 1px -1px 10px 5px lavenderblush;
+    }
+
+    .strd {
+        display: flex;
+        flex-direction: row;
+        margin-top: 1em;
+        align-items: center;
+    }
+
+    .btns {
+        display: flex;
+        flex-wrap: wrap;
+        /* padding: 0.5em; */
+        justify-content: space-evenly;
+
+    }
+
+    button {
+        width: 20%;
+        border: 2px thick white;
+        background-color: rgb(82, 2, 82);
+        padding: 1em 2%;
+        color: white;
+        font-size: 1.1em;
+        margin-left: 0.5em;
+        margin-top: 0.5em;
+    }
+
+    button:hover {
+        background-color: rgb(2, 2, 78);
+    }
+
+    input {
+        margin: 0.5em;
+        padding: 0.3em 2em;
+        border-radius: 0.5em;
+        text-align: right;
+        width: 80%;
+        margin-left: 10%;
+        font-size: 1.5em;
+    }
+
+    h1 {
+        color: rgb(218, 58, 218);
+        font-size: 7em;
+        translate: 45deg;
+    }
+</style>
+
+<body>
+    <!-- <h1>2 + 2</h1>
+    <h1>5% of 100</h1>
+    <h1>1/x</h1> -->
+    <section>
+        <div class="header">
+            <h2>Calculator</h2>
+        </div>
+        <div class="strd">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666">
+                <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+            </svg>
+            <h4>Standard</h4>
+
+        </div>
+        <input type="text" id="display">
+        <input type="text" id="input">
+
+        <p></p>
+        <div class=" btns">
+            <button onclick="operators('%')">%</button>
+            <button onclick="operators('√')">√</button>
+            <button onclick="operators('sq')">x<sup>2</sup></button>
+            <button onclick="operators('1/x')">1/x</button>
+            <button onclick="clear('CE')" id="ce">CE</button>
+            <button onclick="clear('C')" id="c">C</button>
+            <button onclick="clear('del')" id="del">del</button>
+            <button onclick="operators('÷')">÷</button>
+            <button onclick="number('7')">7</button>
+            <button onclick="number('8')">8</button>
+            <button onclick="number('9')">9</button>
+            <button onclick="operators('x')">x</button>
+            <button onclick="number('4')">4</button>
+            <button onclick="number('5')">5</button>
+            <button onclick="number('6')">6</button>
+            <button onclick="operators('-')">-</button>
+            <button onclick="number('1')">1</button>
+            <button onclick="number('2')">2</button>
+            <button onclick="number('3')">3</button>
+            <button onclick="operators('+')">+</button>
+            <button onclick="operators('±')">±</button>
+            <button onclick="number('0')">0</button>
+            <button onclick="number('.')">.</button>
+            <button onclick="displayAns('=')">=</button>
+        </div>
+    </section>
+    <!-- <h1>5 <sup>2</sup></h1>
+    <h1>√169</h1> -->
+</body>
+<script>
+    let firstInput = null,
+        secondInput = null,
+        result = null,
+        operator = null;
+    const display = document.getElementById('display');
+    const input = document.getElementById('input');
+
+    // Handle number inputs
+    function number(figures) {
+        input.value += figures;
+    }
+
+    // Handle operators
+    function operators(Oper) {
+        if (!firstInput) {
+            firstInput = parseFloat(input.value);
+        } else if (operator) {
+            secondInput = parseFloat(input.value);
+            calculate();
+            firstInput = result;
+        }
+        operator = Oper;
+        if(operator == '1/x'){
+            display.value = `1/${firstInput}`
+            input.value = '';
+        }else if (operator == '√') {
+            display.value = `√${firstInput}`
+            input.value = '';
+        } else if (operator == 'sq') {
+            display.value = `${firstInput}^2`
+            input.value = '';
+        } else {
+            display.value = `${firstInput} ${operator}`;
+            input.value = '';
+        }
+    }
+
+    // Perform calculations
+    function calculate() {
+        secondInput = parseFloat(input.value);
+
+        if (operator === '+') {
+            result = firstInput + secondInput;
+        } else if (operator === '-') {
+            result = firstInput - secondInput;
+        } else if (operator === 'x') {
+            result = firstInput * secondInput;
+        } else if (operator === '÷') {
+            result = secondInput !== 0 ? firstInput / secondInput : 'Error';
+        } else if (operator === '%') {
+            result = firstInput/100 * secondInput;
+        } else if (operator === '√') {
+            result = Math.sqrt(firstInput);
+        } else if (operator === 'sq') {
+            result = Math.pow(firstInput, 2);
+        } else if (operator === '1/x') {
+            result = firstInput !== 0 ? 1 / firstInput : 'Error';
+        } else if (operator === '±') {
+            result = -firstInput;
+        }
+
+        if(operator == '1/x'){
+            display.value = `1/${firstInput}`
+        }else if (operator == '√') {
+            display.value = `√${firstInput}`
+        } else if (operator == 'sq') {
+            display.value = `${firstInput}^2`
+        } else {
+            display.value = `${firstInput} ${operator} ${secondInput} =`;
+        }
+
+    }
+
+    // Display the result when "=" is pressed
+    function displayAns() {
+        calculate();
+        operator = null;
+        firstInput = null;
+        secondInput = null;
+        input.value = result;
+    }
+
+    // Clear input or display
+    // function clear(type) {
+    //     if (type === 'CE') {
+    //         input.value = '';
+    //     } else if (type === 'C') {
+    //         input.value = '';
+    //         display.value = '';
+    //         firstInput = null;
+    //         secondInput = null;
+    //         result = null;
+    //         operator = null;
+    //     } else if (type === 'del') {
+    //         input.value = input.value.slice(0, -1);
+    //     }
+    // }
+
+    ce.addEventListener('click', () => {
+        input.value = ''
+    })
+
+    c.addEventListener('click', () => {
+        input.value = '';
+        display.value = '';
+        firstInput = null;
+        secondInput = null;
+        result = null;
+        operator = null;
+    })
+
+    del.addEventListener('click', () => {
+        input.value = input.value.slice(0, -1);
+    })
+
+</script>
+
+</html>

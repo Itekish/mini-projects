@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #e8e8e8;
+        }
+
+        div {
+            border-radius: 10px;
+            padding: 50px;
+            background-color: aliceblue;
+            width: 50%;
+            height: 100px;
+            margin: 25% auto;
+        }
+
+        input {
+            text-align: center;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <input type="number" id="firstinp">
+        <select id="operation">
+            <option value="x" id="multiply">x</option>
+            <option value="+" id="add">+</option>
+            <option value="-" id="subtract">-</option>
+            <option value="/" id="divide">/</option>
+            <option value="%" id="err">%</option>
+        </select>
+        <input type="number" id="secondinp">
+        <button id="operator" onclick="getAnswer()">Sumbit</button>
+        <input type="number" id="result" placeholder="Answer">
+    </div>
+
+</body>
+<script>
+
+    function getAnswer() {
+        let input1 = Number(document.getElementById('firstinp').value);
+        console.log(input1);
+
+        let input2 = Number(document.getElementById('secondinp').value);
+        console.log(input2);
+
+        let operators = document.getElementById('operation').value;
+
+        answer = document.getElementById('result')
+
+        if (operators === "+") {
+            let result = input1 + input2;
+            answer.value = result
+        } else if (operators === "x") {
+            let result = input1 * input2
+            answer.value = result
+        }
+        else if (operators === "-") {
+            let result = input1 - input2
+            answer.value = result
+        }
+        else if (operators === "/") {
+            let result = input1/input2
+            answer.value = result
+        }
+        else {
+           alert("invalid operator")  
+        }
+        
+    }
+
+</script>
+
+</html>

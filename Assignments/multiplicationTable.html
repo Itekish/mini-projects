@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0f4c3, #aed581);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            color: #2e7d32;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+            color: #4e342e;
+        }
+
+        #tables {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+            margin-bottom: 2em;
+        }
+
+        label {
+            font-size: 1em;
+            color: #2e7d32;
+        }
+
+        input {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: 2px solid #81c784;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s ease;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input:focus {
+            border-color: #388e3c;
+            box-shadow: 0px 0px 8px rgba(56, 142, 60, 0.8);
+        }
+
+        button {
+            padding: 10px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            background-color: #388e3c;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #2e7d32;
+        }
+
+        .error {
+            color: red;
+            font-size: 1em;
+            margin-top: -10px;
+            margin-bottom: 1em;
+        }
+
+        #table {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        span {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1em;
+            width: 200px;
+            text-align: left;
+            border-left: 5px solid #388e3c;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            input, button {
+                width: 90%;
+            }
+
+            #table {
+                width: 95%;
+            }
+
+            span {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Multiplication Table Generator</h1>
+    <p>Enter a range to generate multiplication tables</p>
+    <div id="tables">
+        <div>
+            <label for="firstInput">From:</label>
+            <input type="number" id="firstInput" placeholder="Start number">
+        </div>
+        <div>
+            <label for="endInput">To:</label>
+            <input type="number" id="endInput" placeholder="End number">
+        </div>
+        <button id="generateTables">Generate</button>
+        <p class="error" id="error"></p>
+    </div>
+    <section id="table"></section>
+
+    <script>
+        const firstInput = document.getElementById('firstInput');
+        const endInput = document.getElementById('endInput');
+        const generateTables = document.getElementById('generateTables');
+        const table = document.getElementById('table');
+        const error = document.getElementById('error');
+
+        generateTables.addEventListener('click', () => {
+            const start = parseInt(firstInput.value);
+            const end = parseInt(endInput.value);
+
+            error.textContent = '';
+            table.innerHTML = '';
+
+            if (isNaN(start) || isNaN(end)) {
+                error.textContent = 'Please enter valid numbers for both fields.';
+                return;
+            }
+
+            if (start >= end) {
+                error.textContent = '"From" value must be less than "To" value.';
+                return;
+            }
+
+            for (let i = start; i <= end; i++) {
+                const span = document.createElement('span');
+                for (let index = 1; index <= 12; index++) {
+                    span.innerHTML += `${i} × ${index} = ${i * index}<br>`;
+                }
+                table.appendChild(span);
+            }
+
+            firstInput.value = '';
+            endInput.value = '';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List</title>
+    <style>
+        body{
+            margin: 50px;
+            background-color: pink;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif ;
+        }
+        h1{
+            color: rgb(61, 6, 61);
+        }
+        input{
+           padding: 0.9em 2em;
+            border-radius: 7px;
+            border: purple;
+            font-size: 1em;
+            color: rgb(27, 13, 27);
+        }
+        button{
+            background-color: plum;
+            color: purple;
+            border-radius: 10px;
+            height: 50px;
+            width: 80px;
+            font-size: 20px;
+            padding: auto;
+            border: 0;
+        }
+        .flex{
+            display: flex;
+            align-items: center;
+            gap: 2em;
+        }
+
+        table {
+            background-color: white;
+            width: 50%;
+            font-family: cursive;
+        }
+        tr, th {
+            text-align: center;
+            border-collapse: collapse;
+            background-color: rgb(248, 233, 216);
+            border-color: rgb(248, 113, 135);
+        }
+        
+    </style>
+</head>
+<body>
+    <strong style="font-size: 2em;">My To-do List</strong>
+  
+    <h1>add list</h1>
+        <input type="text" id="input">
+        <button onclick="add()">Add</button>
+        <p id="error"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>To-do</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="display"></tbody>
+        </table>
+</body>
+
+<script>
+    let list = [];
+    index = 0;
+
+    function add(){
+        item = input.value;
+        input.value = ''
+        check = list.find((items) => items === item)
+
+        if(check){
+            error.textContent = 'Already exists'
+        }else if(item == ''){
+            error.textContent = 'Empty input'
+        }else {
+            list.push(item)
+            error.textContent = '' 
+        }
+        console.log(list);
+        
+        updateUI()
+    }
+
+    function updateUI(){
+        index++
+        display.innerHTML = ''
+
+        for(let i = 0; i < list.length; i++){
+            display.innerHTML += `
+             <td>${i + 1}</td>
+                <td>${list[i]}</td>
+                <td id="status" style="color: green;">Not done</td>
+                <td><button onclick="btnAction(${i})" id="action" style="padding: auto; margin: 0.5em auto;">Done</button></td>`
+        }
+
+    }
+
+   let status = document.getElementById('status')
+
+    function btnAction(){
+        // status.style.color = 'rgb(61, 6, 61)'
+        // status.innerHTML = 'Done'
+
+        action.innerHTML = 'Delete'
+        // action.style.backgroundColor = 'red'
+        // action.style.color = 'black'
+
+        if(action.innerHTML == 'Delete'){
+           deleteItem()
+        }
+
+        updateUI()
+    }
+
+    function deleteItem(i){
+        list.splice(i, 1)
+    }
+
+    
+// //    correction
+// let list = [];
+
+// function add() {
+//     let item = document.getElementById("input1").value;
+//     document.getElementById("input1").value = "";
+
+//     let check = list.find((items) => items === item);
+
+//     if (check){
+//     error.innerHTML = "Already used";
+// }else {
+//     list.push(item);
+
+//     error.innerHTML = '';
+
+//     updateUI()
+// }
+    
+// };
+// let display = document.getElementById("display");
+// function updateUI() {
+//     // display.innerHTML = '';
+
+//     for(let index = 0; index < list.length; index++){
+//         display.innerHTML += `
+//         <div> class="flex">
+//             <p>${index + 1}</p>
+//             <p>${list[index]}</p>
+//             <button onclick="del(${index})">Delete</button>
+//             </div>`
+//     }
+// };
+
+// function del(param) {
+    
+//     list.splice(param, 1);
+//     updateUI()
+// }
+</script>
+</html>

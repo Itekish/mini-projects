@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge Card Generator</title>
+    <style>
+        body {
+            background-color: cornsilk;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 17px;
+            text-align: center;
+        }
+        input {
+            text-align: center;
+            font-size: 17px;
+        }
+        div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 20px 0;
+            margin-left: 30%;
+        }
+        .div2 {
+            margin-left: 35%;
+        }
+        input, select {
+            padding: 10px;
+        }
+        button {
+            height: 50px;
+            margin-left: 20px;
+            background-color: green;
+            color: white;
+            border: 0;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+        .Recharge {
+            background-color: blue;
+            color: white;
+            width: 200px;
+        }
+        table {
+            background-color: white;
+            width: 100%;
+        }
+        tr, th {
+            border: 1px solid;
+            border-collapse: collapse;
+            background-color: rgb(216, 167, 108);
+            border-color: white;
+        }
+        #status, #dateUsed {
+            color: red;
+        }
+        .delete-button {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recharge Card Generator</h1>
+    <div>
+        <p>Select Network: 
+            <select name="" id="selectNetwork">
+                <option value="MTN">MTN</option>
+                <option value="GLO">GLO</option>
+                <option value="AIRTEL">AIRTEL</option>
+                <option value="9 MOBILE">9 MOBILE</option>
+            </select>
+        </p>
+        <p>Enter pin: 
+            <input type="text" id="use">
+            <button onclick="reCharge()" class="Recharge" id="Recharge">Recharge</button>
+        </p>
+    </div>
+
+    <span>Amount: 
+        <select name="Amount" id="Amount">
+            <option value="50">₦50</option>
+            <option value="100">₦100</option>
+            <option value="200">₦200</option>
+            <option value="500">₦500</option>
+            <option value="1000">₦1000</option>
+        </select>
+    </span>
+
+    <div class="div2">
+        <p>Code: <input type="text" id="code" readonly></p>
+        <button onclick="generatePin()">Generate</button>
+        <button onclick="savePin()">Save pin</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Network Operator</th>
+                <th>Amount</th>
+                <th>Pin</th>
+                <th>Status</th>
+                <th>Date Created</th>
+                <th>Date Used</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            
+        </tbody>
+    </table>
+
+    <script>
+        let sn = 0;  
+        const array = [];
+        let pin;  
+        
+        function generatePin() {
+             pin = Math.floor(Math.random() * 234567894657); 
+            document.getElementById("code").value = pin; 
+            console.log(pin); 
+        }
+
+        function savePin() {
+            const selectNetwork = document.getElementById("selectNetwork").value;
+            const pinCode = document.getElementById("code").value;
+            const amount = document.getElementById("Amount").value;
+            const date = new Date().toLocaleDateString();
+            let networkCode = '';
+
+            
+            if (selectNetwork === "MTN") {
+                networkCode = `*555*${pin}#`;
+            } else if (selectNetwork === "GLO") {
+                networkCode = `*126*${pin}#`;
+            } else if (selectNetwork === "AIRTEL") {
+                networkCode = `*124*${pin}#`;
+            } else if (selectNetwork === "9 MOBILE") {
+                networkCode = `*888*${pin}#`;
+            }
+
+            array.push({
+                sn: ++sn,
+                network: selectNetwork,
+                amount: amount,
+                pin: networkCode, 
+                status: "Unused",
+                dateCreated: date,
+                dateUsed: "Not Used Yet"
+            });
+
+            
+            updateTable();
+        }
+
+        function updateTable() {
+            const tableBody = document.getElementById("tableBody");
+            tableBody.innerHTML = ''; 
+
+
+            array.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.sn}</td>
+                    <td>${record.network}</td>
+                    <td>${record.amount}</td>
+                    <td>${record.pin}</td>
+                    <td id="status-${record.sn}">${record.status}</td>
+                    <td>${record.dateCreated}</td>
+                    <td id="dateUsed-${record.sn}">${record.dateUsed}</td>
+                    <td><button class="delete-button" onclick="deletePin(${record.sn})">Delete</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function reCharge() {
+            const use = document.getElementById('use').value; 
+            const record = array.find(r => r.pin === use); 
+            
+            if (record) {
+                record.status = "Used"; 
+                record.dateUsed = new Date().toLocaleDateString();
+                updateTable(); 
+                alert("Recharge successful!");
+            } else {
+                alert("Invalid pin. Please try again.");
+            }
+            document.getElementById('use').value = '';
+        }
+
+        function deletePin(sn) {
+            const index = array.findIndex(record => record.sn === sn); 
+            
+            // if (index !== -1) {
+                array.splice(index, 1); 
+                updateTable(); 
+            // }
+        }
+    </script>
+</body>
+</html>

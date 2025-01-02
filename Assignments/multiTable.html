@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            background-color: palegreen;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            text-align: center;
+            font-size: 1em;
+        }
+        h1{
+            padding: 0.5em;
+            color: goldenrod;
+            font-size: 2em;
+        }
+
+        p{
+            color: maroon;
+            font-size: 1.5em;
+            padding: 0.5em;
+        }
+
+      label{
+        padding: 0.5em;
+        color: midnightblue;
+      }
+
+      input{
+        padding: 1em 3em;
+        border-radius: 7px;
+        background-color: lightyellow;
+        text-align: center;
+      }
+      
+      button{
+        padding: 0.5em 3em;
+        font-size: 1em;
+        border-radius: 7px;
+        background-color: midnightblue;
+        color: white;
+      }
+
+      #table{
+        padding: 2em;
+        display: flex;
+        flex-direction: row;
+      }
+      span{
+        margin: 1em;
+      }
+    </style>
+</head>
+<body>
+    <h1>Multiplication Table Generator</h1>
+    <p>Generate Multiplication Tables</p>
+    <div id="tables">
+        <label for="firstInput">From:</label>
+        <input type="number" id="firstInput">
+        <label for="endInput">To:</label>
+        <input type="number" id="endInput">
+        <button id="generateTables">Generate</button>
+    </div>
+    <section>
+        <div id="table"></div>
+    </section>
+</body>
+<script>
+   let firstInput = document.getElementById('firstInput'),
+    endInput = document.getElementById('endInput'),
+    generateTables = document.getElementById('generateTables'),
+    table = document.getElementById('table');
+    
+    generateTables.addEventListener('click', ()=> {
+        firstInput = parseFloat(firstInput.value)
+        endInput = parseFloat(endInput.value);
+        console.log(firstInput, endInput);
+
+      if(firstInput >= endInput){
+        table.textContent = 'Invalid Operation' 
+      }else{
+        
+        table.innerHTML = ''
+        for (let i = firstInput; i <= endInput; i++){
+          let span = document.createElement('span');
+            for(let index = 1; index <= 12; index++){
+
+                span.innerHTML += `${i}  x  ${index}  = ${i * index}<br><br>`
+              }
+              console.log(span);
+              table.appendChild(span)
+            }
+      }  
+       
+      firstInput = ''
+      endInput = ''
+    })
+</script>
+</html>

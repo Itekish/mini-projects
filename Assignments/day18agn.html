@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: orange;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            font-family: dancing script, sans-serif;
+        }
+
+        #clock {
+            margin-left: 70%;
+            background-color: blueviolet;
+            padding: 30px;
+            color: whitesmoke;
+            font-size: 50px;
+            width: 300px;
+            border-radius: 50%;
+            border: none;
+            text-align: center;
+        }
+
+        #setAlarm {
+            padding: 20px;
+            width: 150px;
+            height: 20px;
+            font-size: 20px;
+            background-color: rgb(187, 86, 86);
+            border: none;
+        }
+
+        button {
+            background-color: brown;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: whitesmoke;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Alarmee</h1>
+    <div id="clock"></div>
+    <div>
+        <input type="time" id="setAlarm">
+        <button onclick="setAlarm()">Set</button>
+    </div>
+    <a href=""></a>
+</body>
+<script>
+
+    let myClock,
+        alarmTime,
+        ring = new Audio('../Resource/ALLYSON (2).mp3-1.mp3');
+
+    function updateTime() {
+        let now = new Date(),
+            hours = now.getHours(),
+            minutes = now.getMinutes()
+        seconds = now.getSeconds()
+
+        let ampm = hours < 12 ? 'am' : 'pm'
+
+        hours > 12 ? hours = hours - 12 : hours
+
+        hours = hours < 10 ? hours = `0${hours}` : hours
+        minutes = minutes < 10 ? minutes = `0${minutes}` : minutes
+        seconds = seconds < 10 ? seconds = `0${seconds}` : seconds
+
+        clock = document.getElementById('clock')
+
+
+        myClock = `${hours}:${minutes}:${seconds} ${ampm}`,
+            clock.innerHTML = myClock
+
+        if (alarmTime === myClock) {
+            ring.play()
+        }
+    }
+
+
+    setInterval(() => {
+        updateTime()
+    }, 1000);
+
+    updateTime()
+
+    function setAlarm() {
+        myTime = document.getElementById('setAlarm').value;
+        if (myTime) {
+            let [myHour, myMinute] = myTime.split(':');
+
+            let ampm = myHour < 12 ? 'am' : 'pm'
+
+            myHour > 12 ? myHour = myHour - 12 : myHour
+
+            alarmTime = `${myHour}:${myMinute}:00 ${ampm}`
+            console.log(alarmTime);
+
+            alert(`Alarm is set for ${alarmTime}`)
+        }
+
+    }
+    setAlarm()
+</script>
+
+</html>

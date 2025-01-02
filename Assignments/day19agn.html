@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        section {
+            box-shadow: -5px -5px 10px 5px rgb(189, 189, 189);
+            margin: 5% auto;
+            width: 70%;
+            padding: 50px;
+            border-radius: 20px;
+            color: navy;
+        }
+
+        .quiz {
+            text-align: center;
+            font-size: 25px;
+        }
+
+        button {
+            background-color: navy;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 15px;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #subjects {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        #subjects button {
+            background-color: white;
+            color: navy;
+            border-radius: 20px;
+            box-shadow: inset 10px 10px 5px 5px lightblue;
+            margin: 10px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div class="quiz">
+            <h1>Quiz Cat</h1>
+        </div>
+        <div id="subjects">
+            <button onclick=" chgsub('English')">English</button>
+            <button onclick=" chgsub('Maths')">Maths</button>
+            <button onclick=" chgsub('Chemistry')">Chemistry</button>
+            <button onclick=" chgsub('Physics')">Physics</button>
+            <button onclick=" chgsub('Geography')">Geography</button>
+            <button onclick=" chgsub('History')">History</button>
+            <button onclick=" chgsub('Biology')">Biology</button>
+            <button onclick=" chgsub('Economics')">Economics</button>
+        </div>
+        <h1 id="currentSubject"></h1>
+        <h3 id="queRef"></h3>
+        <div id="question"></div>
+        <div id="options"></div>
+        <div class="btn">
+            <button onclick="subNav('prev')" id="prev">Prev</button>
+            <button onclick="subNav('next')" id="next">Next</button>
+        </div>
+    </section>
+</body>
+<script>
+
+    let queRef = document.getElementById('queRef'),
+        question = document.getElementById('question'),
+        options = document.getElementById('options'),
+        subject = document.getElementById('currentSubject'), 
+        prevQue = document.getElementById('prev'),
+        nextQue = document.getElementById('next'),
+        subArr = ['English', 'Maths', 'Chemistry', 'Phisics', 'Geography', 'History', 'Biology', 'Economics'];
+
+
+    // ----Quiz questions----
+    let quizQue = {
+        English: [
+            {
+                question: 'What is a noun?',
+                options: ['An action word', 'A naming word', 'A descriptive word', 'A verb'],
+                answer: 'A naming word'
+            },
+            {
+                question: 'What is a pronoun?',
+                options: ['A naming word', 'A replacement for a noun', 'A verb', 'An adjective'],
+                answer: 'A replacement for a noun'
+            },
+            {
+                question: 'What is a verb?',
+                options: ['A naming word', 'An action word', 'A descriptive word', 'A sentence'],
+                answer: 'An action word'
+            },
+            {
+                question: 'Identify the adjective: "The bright sun shone all day."',
+                options: ['Bright', 'Sun', 'Shone', 'Day'],
+                answer: 'Bright'
+            },
+            {
+                question: 'What is the past participle of "write"?',
+                options: ['Wrote', 'Written', 'Writing', 'Writes'],
+                answer: 'Written'
+            },
+            {
+                question: 'What is the antonym of "ancient"?',
+                options: ['Modern', 'Old', 'Past', 'Historical'],
+                answer: 'Modern'
+            },
+            {
+                question: 'What is the synonym of "happy"?',
+                options: ['Sad', 'Joyful', 'Quiet', 'Angry'],
+                answer: 'Joyful'
+            },
+            {
+                question: 'Choose the correct article: "I saw ___ elephant."',
+                options: ['A', 'An', 'The', 'None'],
+                answer: 'An'
+            },
+            {
+                question: 'Choose the correct word: "It is ___ book."',
+                options: ["father's", "fathers'", "fathers", "father"],
+                answer: "father's"
+            },
+            {
+                question: 'Which of these is a compound sentence?',
+                options: ['I like cats.', 'She runs fast.', 'I went to the park, and she stayed home.', 'He swims.'],
+                answer: 'I went to the park, and she stayed home.'
+            }
+        ],
+        Maths: [
+            {
+                question: 'What is 2 + 2?',
+                options: ['4', '6', '9', '3'],
+                answer: '4'
+            },
+            {
+                question: 'What is the square root of 16?',
+                options: ['2', '3', '4', '5'],
+                answer: '4'
+            },
+            {
+                question: 'Solve for x: 2x + 3 = 7.',
+                options: ['1', '2', '3', '4'],
+                answer: '2'
+            },
+            {
+                question: 'What is 3 multiplied by 5?',
+                options: ['10', '15', '20', '25'],
+                answer: '15'
+            },
+            {
+                question: 'What is the perimeter of a square with side 4 cm?',
+                options: ['8 cm', '16 cm', '12 cm', '20 cm'],
+                answer: '16 cm'
+            },
+            {
+                question: 'Simplify: 6 ÷ 3 + 2.',
+                options: ['2', '3', '4', '5'],
+                answer: '4'
+            },
+            {
+                question: 'Find the value of 10% of 200.',
+                options: ['10', '20', '30', '40'],
+                answer: '20'
+            },
+            {
+                question: 'What is 1/2 of 8?',
+                options: ['3', '4', '6', '8'],
+                answer: '4'
+            },
+            {
+                question: 'What is the area of a rectangle with length 5 cm and breadth 3 cm?',
+                options: ['15 cm²', '8 cm²', '10 cm²', '12 cm²'],
+                answer: '15 cm²'
+            },
+            {
+                question: 'What is the value of π to 2 decimal places?',
+                options: ['3.12', '3.14', '3.16', '3.18'],
+                answer: '3.14'
+            }
+        ],
+        Chemistry: [
+            {
+                question: 'What is the chemical symbol for water?',
+                options: ['H2O', 'O2', 'CO2', 'HO2'],
+                answer: 'H2O'
+            },
+            {
+                question: 'What is the pH of pure water?',
+                options: ['7', '5', '9', '3'],
+                answer: '7'
+            },
+            {
+                question: 'What is the main gas in the air we breathe?',
+                options: ['Oxygen', 'Nitrogen', 'Carbon dioxide', 'Hydrogen'],
+                answer: 'Nitrogen'
+            },
+            {
+                question: 'What is the periodic table?',
+                options: ['List of planets', 'Arrangement of elements', 'Math symbols', 'Chemical reactions'],
+                answer: 'Arrangement of elements'
+            },
+            {
+                question: 'What is the chemical formula for salt?',
+                options: ['HCl', 'NaCl', 'KCl', 'CaCl'],
+                answer: 'NaCl'
+            },
+            {
+                question: 'Which particle has a positive charge?',
+                options: ['Electron', 'Proton', 'Neutron', 'Photon'],
+                answer: 'Proton'
+            },
+            {
+                question: 'What is the atomic number of oxygen?',
+                options: ['6', '7', '8', '9'],
+                answer: '8'
+            },
+            {
+                question: 'Which acid is found in vinegar?',
+                options: ['Citric acid', 'Acetic acid', 'Lactic acid', 'Sulfuric acid'],
+                answer: 'Acetic acid'
+            },
+            {
+                question: 'What does the term "mole" refer to in chemistry?',
+                options: ['A small animal', 'A quantity', 'A reaction', 'A mixture'],
+                answer: 'A quantity'
+            },
+            {
+                question: 'Which element is essential for respiration?',
+                options: ['Hydrogen', 'Oxygen', 'Nitrogen', 'Carbon'],
+                answer: 'Oxygen'
+            }
+        ],
+        Physics: [
+            {
+                question: 'What is the speed of light?',
+                options: ['3 x 10^8 m/s', '1 x 10^6 m/s', '5 x 10^8 m/s', '2 x 10^8 m/s'],
+                answer: '3 x 10^8 m/s'
+            },
+            {
+                question: 'What is the SI unit of force?',
+                options: ['Joule', 'Newton', 'Pascal', 'Watt'],
+                answer: 'Newton'
+            },
+            {
+                question: 'Who formulated the laws of motion?',
+                options: ['Einstein', 'Newton', 'Tesla', 'Bohr'],
+                answer: 'Newton'
+            },
+        ],
+        Geography: [
+            {
+                question: 'What is the largest continent?',
+                options: ['Africa', 'Asia', 'Europe', 'Antarctica'],
+                answer: 'Asia'
+            },
+            {
+                question: 'What is the capital of Australia?',
+                options: ['Sydney', 'Melbourne', 'Canberra', 'Perth'],
+                answer: 'Canberra'
+            },
+            {
+                question: 'Which river is the longest in the world?',
+                options: ['Amazon', 'Nile', 'Yangtze', 'Mississippi'],
+                answer: 'Nile'
+            },
+        ],
+        history: [
+            {
+                question: 'Who was the first president of the United States?',
+                options: ['George Washington', 'Abraham Lincoln', 'Thomas Jefferson', 'John Adams'],
+                answer: 'George Washington'
+            },
+            {
+                question: 'What year did World War II begin?',
+                options: ['1937', '1939', '1941', '1945'],
+                answer: '1939'
+            },
+        ],
+        Biology: [
+            {
+                question: 'What is the powerhouse of the cell?',
+                options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Cytoplasm'],
+                answer: 'Mitochondria'
+            },
+            {
+                question: 'What is the largest organ in the human body?',
+                options: ['Heart', 'Skin', 'Lungs', 'Brain'],
+                answer: 'Skin'
+            },
+        ],
+        Economics: [
+            {
+                question: 'What is demand?',
+                options: ['Desire to own something', 'Willingness to pay', 'Both', 'Neither'],
+                answer: 'Both'
+            },
+            {
+                question: 'What does GDP stand for?',
+                options: ['Gross Domestic Product', 'Gross Development Plan', 'Government Domestic Policy', 'Global Domestic Product'],
+                answer: 'Gross Domestic Product'
+            },
+        ]
+        };
+
+        let {English, Maths, Chemistry, Phisics, Geography, History, Biology, Economics} = quizQue
+
+    let index = 1;
+
+    subject.innerHTML = subArr[0];
+    queRef.innerHTML = `Question 1 of ${English.length}<br><br>`;
+    question.innerHTML = `${English[0].question}<br><br>`
+
+    for (let i = 0; i < English[0].options.length; i++) {
+        options.innerHTML += `
+    <input type="radio" name="answer"> ${English[0].options[i]}<br><br>
+    `
+    }
+
+    function next() {
+        
+        queRef.innerHTML = `Question ${index + 1} of ${English.length}<br><br>`;
+        question.innerHTML = `${English[index].question}<br><br>`
+        
+        index < English.length - 1 ? index = index + 1 : nextQue.innerHTML = 'submit'
+        options.innerHTML = ''
+
+        for (let i = 0; i < English[index].options.length; i++) {
+            options.innerHTML += `
+    <input type="radio" name="answer"> ${English[index - 1].options[i]}<br><br>
+    `
+}
+    }
+
+    function prev() {
+        index > 0 ? index = index - 1 : alert('This is the beginning')
+
+        queRef.innerHTML = `Question ${index + 1} of ${English.length}<br><br>`;
+        question.innerHTML = `${English[index].question}<br><br>`
+
+        options.innerHTML = ''
+
+        for (let i = English[index].options.length - 1; i >= 0; i--) {
+            options.innerHTML += `
+<input type="radio" name="answer"> ${English[index].options[i]}<br><br>
+`
+        }
+    }
+
+    function chgsub(subj) {
+        subject.innerHTML = subj
+
+    }
+</script>
+
+</html>
